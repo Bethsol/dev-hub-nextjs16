@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      }
+    ]
+  }, // <--- FIXED: Added missing comma here
+  
   /* config options here */
   async rewrites() {
     return [
@@ -11,6 +22,10 @@ const nextConfig: NextConfig = {
       {
         source: "/ingest/:path*",
         destination: "https://eu.i.posthog.com/:path*",
+      },
+      {
+        source: "/ingest/decide",
+        destination: "https://eu.i.posthog.com/decide",
       },
     ];
   },
