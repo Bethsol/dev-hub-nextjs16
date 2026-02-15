@@ -4,6 +4,7 @@ import { events } from "@/lib/constants"
 import type { IEvent } from "@/database";
 import { cacheLife } from "next/cache";
 
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 
