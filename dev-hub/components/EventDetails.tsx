@@ -73,7 +73,8 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
   } = event;
 
   const bookings = 10;
-  const similarEvents: IEvent[] = await getSimilarEventBySlug(slug);
+  const rawSimilarEvents = await getSimilarEventBySlug(slug);
+  const similarEvents = JSON.parse(JSON.stringify(rawSimilarEvents));
 
   console.log(similarEvents);
 
