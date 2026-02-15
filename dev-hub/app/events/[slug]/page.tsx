@@ -4,6 +4,8 @@ import BookEvent from "@/components/BookEvent";
 import type { IEvent } from "@/database";
 import { getSimilarEventBySlug } from "@/lib/actions/event.actions";
 import EventCard from "@/components/EventCard";
+import { cacheLife } from "next/cache";
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -20,7 +22,7 @@ const EventAgenda = ({ agendaItems }: { agendaItems: any }) => {
   return (
     <div className="agenda mt-6">
       <h2 className="font-bold">Agenda</h2>
-      <ul className="list-disc ml-5">
+      <ul className="font-mono text-sm text-slate-300 italic tracking-tight">
         {agendaItems.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
@@ -32,9 +34,9 @@ const EventAgenda = ({ agendaItems }: { agendaItems: any }) => {
 const EventTags = ({ tags }: { tags: any }) => {
   if (!tags || !Array.isArray(tags)) return null;
   return (
-    <div className="flex flex-row gap-1.5 flex-wrap mt-4">
+    <div className="flex flex-row gap-1.5 flex-wrap">
       {tags.map((tag, index) => (
-        <div className="pill bg-gray-200 px-3 py-1 rounded-full text-sm" key={index}>{tag}</div>
+        <div className="pill" key={tag}>{tag}</div>
       ))}
     </div>
   );
@@ -42,6 +44,8 @@ const EventTags = ({ tags }: { tags: any }) => {
 
 // --- Main Page Component ---
 const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }>}) => {
+  'use cache'
+  cacheLife('seconds');
   const { slug } = await params;
 
   let event;
@@ -60,7 +64,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }>}
 
     if (!event) return notFound();
   } catch (err) {
-    console.error('Error fetching event:', err);
+    console.error('Error fetching event:', error);
     return notFound();
   }
 
@@ -86,14 +90,14 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }>}
   };
 
   return (
-    <section id="event" className="p-4 max-w-6xl mx-auto">
+    <section id="event">
       <div className="header">
-        <h1 className="text-3xl font-bold">Event Description</h1>
-        <p className="mt-2 text-gray-600">{description}</p>
+        <h1>Event Description</h1>
+        <p className="mt-2 text-slate-400">{description}</p>
       </div>
       
-      <div className="details flex flex-col md:flex-row gap-8 mt-8">
-        <div className="content flex-1">
+      <div className="details">
+        <div className="content">
           {image && (
             <Image 
               src={image} 
@@ -105,8 +109,8 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }>}
           )}
           
           <section className="mt-6">
-            <h2 className="text-xl font-semibold">Overview</h2>
-            <p className="mt-2">{overview}</p>
+            <h2>Overview</h2>
+            <p>{overview}</p>
           </section>
 
           <section className="mt-6 flex flex-col gap-3">
@@ -120,7 +124,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }>}
 
           <EventAgenda agendaItems={parseData(agenda)} />
           
-          <section className="mt-6">
+          <section className="flex-col-gap-2">
             <h2 className="text-xl font-semibold">About the organizer</h2>
             <p className="mt-2">{organizer}</p>
           </section>
@@ -139,7 +143,7 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }>}
               <p className="text-sm">Be the first to book your spot!</p>
             )}
         
-            <BookEvent />
+            <BookEvent eventId={event._id} slug={event.slug} />
             
           </div>
         </aside>
