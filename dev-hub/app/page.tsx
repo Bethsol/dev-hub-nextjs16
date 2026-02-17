@@ -1,14 +1,11 @@
 import ExploreBtn from "@/components/ExploreBtn"
 import EventCard from "@/components/EventCard"
 import type { IEvent } from "@/database";
-import { cacheLife } from "next/cache";
 import { getAllEvents } from "@/lib/actions/event.actions";
 
-const page = async () => {
-  'use cache';
-  cacheLife('hours')
+export const revalidate = 3600; // Revalidate every hour
 
-  // Fetch events using server action to avoid build defaults
+const page = async () => {
   const events: any = await getAllEvents();
 
   return (
