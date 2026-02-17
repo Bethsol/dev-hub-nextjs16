@@ -3,13 +3,12 @@ import EventCard from "@/components/EventCard"
 import { events } from "@/lib/constants"
 import type { IEvent } from "@/database";
 import { cacheLife } from "next/cache";
-import { getAllEvents } from "@/lib/actions/event.actions";
 
 
 const page = async () => {
   'use cache';
   cacheLife('hours')
-  const events = await getAllEvents();
+
 
   return (
     <section>
