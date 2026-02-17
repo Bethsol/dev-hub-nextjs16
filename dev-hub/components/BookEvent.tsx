@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import posthog from "posthog-js";
-import { IBooking } from "@/lib/actions/booking.actions";
+import { IBooking, createBooking } from "@/lib/actions/booking.actions";
 
 const BookEvent = ({ eventId, slug }: { eventId: string, slug: string; }) => {
   const [email, setEmail] = useState('');
@@ -35,10 +35,10 @@ const BookEvent = ({ eventId, slug }: { eventId: string, slug: string; }) => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-2">
             <label htmlFor="email">Email Address</label>
-            <input 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               id="email"
               placeholder="Enter your email address"
               className="border p-2 rounded"
