@@ -8,6 +8,7 @@ const page = async () => {
   'use cache';
   cacheLife('hours')
 
+  // Fetch events using server action to avoid build defaults
   const events: any = await getAllEvents();
 
   return (
